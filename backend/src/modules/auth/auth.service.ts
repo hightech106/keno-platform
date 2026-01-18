@@ -14,10 +14,13 @@ export async function registerAdmin(
   }
 
   const passwordHash = await bcrypt.hash(password, 10);
+  
+  const adminCount = await AdminModel.countDocuments();
 
   const admin = await AdminModel.create({
     email,
-    passwordHash
+    passwordHash,
+    role: adminCount === 0 ? "SUPER_ADMIN" : "OPERATOR_ADMIN"
   });
 
   return admin;
