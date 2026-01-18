@@ -42,11 +42,11 @@ export async function loginAdmin(
 
   const token = jwt.sign(
     {
-      adminId: admin._id,
+      adminId: admin._id.toString(),
       role: admin.role
     },
-    JWT_SECRET,
-    { expiresIn: "8h" }
+    process.env.JWT_SECRET!,
+    { expiresIn: "1d" }
   );
 
   return token;
