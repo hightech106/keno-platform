@@ -4,8 +4,9 @@ import { drawKenoNumbers } from "../engine/draw";
 import { countMatches } from "../engine/match";
 import { calculatePayout } from "../engine/payout";
 import { WalletService } from "../../wallet/wallet.service";
+import { logRound } from "../round/round.service";
 
-export function placeBet(req: Request, res: Response) {
+export async function placeBet(req: Request, res: Response) {
 
   if (!req.user) {
     return res.status(401).json({ error: "Unauthorized" });
@@ -33,6 +34,16 @@ export function placeBet(req: Request, res: Response) {
     if (winAmount > 0) {
       creditTx = WalletService.credit(userId, winAmount);
     }
+
+    await logRound({
+      operatorId: "DEFAULT_OPERATOR", // Phase 9 → dynamic
+      userId,
+      betAmount,
+      numbers,
+      drawnNumbers,
+      matches,
+      winAmount
+    });
 
     res.json({
       debitTx,

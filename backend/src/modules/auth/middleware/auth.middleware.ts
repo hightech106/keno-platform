@@ -25,13 +25,12 @@ export function authenticate(
 
   try {
     const decoded = jwt.verify(token, getJwtSecret()) as {
-      id: string;
+      adminId: string;
       role: string;
     };
 
-    // 🔑 THIS WAS MISSING OR WRONG
     req.user = {
-      id: decoded.id,
+      id: decoded.adminId,
       role: decoded.role
     };
 
